@@ -17,17 +17,37 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        ListView lvNama = (ListView) findViewById(R.id.lvNama);
+        ListView lvNama = findViewById(R.id.lvNama);
 
-        ArrayList<String> daftar_nama = getIntent().getExtras().getStringArrayList("daftar_nama");
+        ArrayList<String> daftar_nama = getIntent().getStringArrayListExtra("daftar_nama");
+        ArrayList<Integer> daftar_umur = getIntent().getIntegerArrayListExtra("daftar_umur");
 
-        if(daftar_nama.isEmpty()){
-            daftar_nama.add("data masih kosong");
+        if (daftar_nama == null || daftar_nama.isEmpty() || daftar_umur == null || daftar_umur.isEmpty()) {
+            daftar_nama = new ArrayList<>();
+            daftar_nama.add("Data masih kosong");
+            daftar_umur = new ArrayList<>();
+            daftar_umur.add(0); // Add a placeholder age
         }
 
-        ArrayAdapter<String> ad_nama = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, daftar_nama);
+        ArrayList<String> daftar_status = new ArrayList<>();
 
-        lvNama.setAdapter(ad_nama);
+        for (int umur : daftar_umur) {
+            String status;
+            if (umur < 10) {
+                status = "Anak";
+            } else if (umur < 20) {
+                status = "Remaja";
+            } else if (umur < 40) {
+                status = "Dewasa";
+            } else {
+                status = "Tua";
+            }
+            daftar_status.add(status);
+        }
 
+        ArrayAdapter<String> ad_status = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, daftar_status);
+
+        lvNama.setAdapter(ad_status);
     }
 }
+
